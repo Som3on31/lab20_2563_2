@@ -58,6 +58,35 @@ Unit::Unit(string t,string n){
 	equipment = NULL;
 }
 
+Equipment::Equipment(int h,int a,int d){
+    hpmax = h; atk = a; def = d; 
+}
+
+vector<int> Equipment::getStat(){
+	vector <int> stats;
+    for (int i=0;i<3;i++){
+        switch (i){
+        case 0: stats.push_back(hpmax);
+        case 1: stats.push_back(atk);
+        case 2: stats.push_back(def);
+        }
+    }
+	return stats;
+}
+
+void Unit::equip(Equipment *kek){
+    vector<int> new_equipment = kek->getStat();
+
+
+
+	hpmax += new_equipment[0];		//increment and decrement section. far from complete.
+	if (hp>hpmax) hp = hpmax;
+
+	atk += new_equipment[1];
+
+	def += new_equipment[2];
+}
+
 void Unit::showStatus(){
 	if(type == "Hero"){
 		cout << "---------------------------------------\n"; 
