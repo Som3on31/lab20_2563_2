@@ -64,26 +64,32 @@ Equipment::Equipment(int h,int a,int d){
 
 vector<int> Equipment::getStat(){
 	vector <int> stats;
-    for (int i=0;i<3;i++){
-        switch (i){
-        case 0: stats.push_back(hpmax);
-        case 1: stats.push_back(atk);
-        case 2: stats.push_back(def);
-        }
-    }
+    
+    stats.push_back(hpmax);
+	stats.push_back(atk);
+    stats.push_back(def);
+
 	return stats;
 }
 
 void Unit::equip(Equipment *kek){
     vector<int> new_equipment = kek->getStat();
+	
 
+	if(!(equipment==NULL)){
+		vector<int> current_equipment = equipment->getStat();
+		hpmax -= current_equipment[0];
+		atk -= current_equipment[1];
+		def -= current_equipment[2];
 
+		
+	}
+	
+	equipment = kek;
 
 	hpmax += new_equipment[0];		//increment and decrement section. far from complete.
 	if (hp>hpmax) hp = hpmax;
-
 	atk += new_equipment[1];
-
 	def += new_equipment[2];
 }
 
