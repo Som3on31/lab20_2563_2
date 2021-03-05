@@ -24,7 +24,7 @@ class Unit{
 		int atk;
 		int def;
 		bool guard_on;
-		bool dodge_on; 
+		bool dodge_on;
 		Equipment *equipment; 
 	public:			
 		Unit(string,string); 
@@ -53,6 +53,7 @@ Unit::Unit(string t,string n){
 		def = rand()%3+5;
 	}
 	hp = hpmax;	
+	dodge_on = false;
 	guard_on = false;
 	equipment = NULL;
 }
@@ -63,7 +64,7 @@ void Unit::showStatus(){
 		cout << name << "\n"; 
 		cout << "HP: " << hp << "/" << hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def;		
 		cout << "\n---------------------------------------\n";
-	}	
+	}
 	else if(type == "Monster"){
 		cout << "\t\t\t\t---------------------------------------\n"; 
 		cout << "\t\t\t\t" << name << "\n"; 
@@ -72,16 +73,18 @@ void Unit::showStatus(){
 	}
 }
 
-void Unit::newTurn(){
-	guard_on = false; 
-}
 
 int Unit::beAttacked(int oppatk){
 	int dmg;
 	if(oppatk > def){
 		dmg = oppatk-def;	
 		if(guard_on) dmg = dmg/3;
-	}	
+		if (dodge_on == true){
+		    int dodge_chance = rand()%2;
+		    if (dodge_chance == 1) dmg = 0;
+		    else dmg *= 2;
+		}
+	}
 	hp -= dmg;
 	if(hp <= 0){hp = 0;}
 	
@@ -90,6 +93,10 @@ int Unit::beAttacked(int oppatk){
 
 int Unit::attack(Unit &opp){
 	return opp.beAttacked(atk);
+}
+
+int Unit::ultimateAttack(Unit &opp){
+    return opp.beAttacked(2*atk);
 }
 
 int Unit::heal(){
@@ -103,9 +110,17 @@ void Unit::guard(){
 	guard_on = true;
 }	
 
+void Unit::dodge(){
+    dodge_on = true;
+}
+
 bool Unit::isDead(){
 	if(hp <= 0) return true;
 	else return false;
+}
+
+void Unit::newTurn(){
+    guard_on = false; dodge_on = false;
 }
 
 void drawScene(char p_action,int p,char m_action,int m){
